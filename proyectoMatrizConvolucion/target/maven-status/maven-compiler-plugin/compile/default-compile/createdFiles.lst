@@ -1,1 +1,6 @@
 paq\pruebas\Prueba.class
+paq\clases\ConvolucionImagen.class
+paq\clases\Matriz.class
+paq\interfaces\KernelSobel5x5.class
+paq\clases\FiltroSobel5x5.class
+paq\interfaces\Mensajes.class

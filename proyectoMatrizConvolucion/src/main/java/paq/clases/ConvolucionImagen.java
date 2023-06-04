@@ -16,7 +16,8 @@ public class ConvolucionImagen extends Matriz implements Mensajes{
     private BufferedImage imagen;
     private int alto, ancho;
     private int matrizRGB[][];
-    private int matrizConvolucion[][], extension;
+    private double matrizConvolucion[][];
+    private int extension;
     
     // Constructores
     public ConvolucionImagen(BufferedImage imagen) {        
@@ -80,7 +81,7 @@ public class ConvolucionImagen extends Matriz implements Mensajes{
         return imagen;
     }
     
-    public void cargarMatrizConvolucion(int[][] matrizConvolucion){
+    public void cargarMatrizConvolucion(double[][] matrizConvolucion){
         if (!esNula(matrizConvolucion)) {
             if (esMatrizCuadrada(matrizConvolucion)) {
                 this.matrizConvolucion = matrizConvolucion;
@@ -120,7 +121,6 @@ public class ConvolucionImagen extends Matriz implements Mensajes{
                 matrizResultado[y-getExtension()/2][x-getExtension()/2] = sumaProd;
             }
         }
-        System.out.println(Matriz.matrizString(matrizResultado));
         return matrizResultado;
     }
     
@@ -157,11 +157,11 @@ public class ConvolucionImagen extends Matriz implements Mensajes{
         this.matrizRGB = matrizRGB;
     }
 
-    public int[][] getMatrizConvolucion() {
+    public double[][] getMatrizConvolucion() {
         return matrizConvolucion;
     }
 
-    public void setMatrizConvolucion(int[][] matrizConvolucion) {
+    public void setMatrizConvolucion(double[][] matrizConvolucion) {
         this.matrizConvolucion = matrizConvolucion;
     }
 

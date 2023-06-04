@@ -4,17 +4,15 @@ package paq.clases;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import javax.imageio.ImageIO;
 import paq.interfaces.*;
 
 /*
  * @author Jesu
  */
-public abstract class FiltroSobel implements MatricesConvolucion{
+public abstract class FiltroSobel5x5 implements KernelSobel5x5{
     // Métodos
-    public static void deteccionBordes(String rutaImagen, int gradiente) throws MalformedURLException, IOException{
+    public static void deteccionBordes(String rutaImagen, int gradiente){
         // Inicio
         BufferedImage imagen = ConvolucionImagen.cargarImagen(rutaImagen);
         if (imagen==null) {return;}

@@ -1,6 +1,6 @@
 package paq.pruebas;
 
-import paq.clases.FiltroSobel;
+import paq.clases.FiltroSobel5x5;
 
 /*
  * @author Jesu
@@ -8,8 +8,8 @@ import paq.clases.FiltroSobel;
 public class Prueba {
     public static void main(String[] args) {
         String rutaImagen = "C:\\Users\\Jesu\\Downloads\\imagenPrueba.png";
-        FiltroSobel.deteccionBordes(rutaImagen, 600);
-        FiltroSobel.filtroX(rutaImagen, 600);
-        FiltroSobel.filtroY(rutaImagen, 600);
+        FiltroSobel5x5.deteccionBordes(rutaImagen, 600);
+        FiltroSobel5x5.filtroX(rutaImagen, 600);
+        FiltroSobel5x5.filtroY(rutaImagen, 600);
     }
 }
