@@ -80,9 +80,9 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
     }
     
     // Métodos
-    public void deteccionBordes(int gradiente) {
+    public BufferedImage deteccionBordes(int gradiente) {
         // Inicio
-        if (getImagen()==null) {return;}
+        if (getImagen()==null) {return null;}
         BufferedImage imagen = getImagen();
         // Cargar matrices resultantes
         cargarMatrizConvolucion(MATRIZGX);
@@ -101,12 +101,7 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
                 imagen.setRGB(x, y, pixel);
             }
         }
-        try {
-            File fin = new File("C:\\Users\\Jesu\\Downloads\\output.png");
-            ImageIO.write(imagen, "png", fin);
-        } catch(IOException e){
-            System.out.println(e);
-        }
+        return imagen;
     }
     
     public void filtroX(String rutaImagen, int gradiente){

@@ -72,12 +72,7 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
     protected int[][] extenderMatrizConCeros(int[][] matriz){
         // En caso se desee usar el atributo matrizRGB en lugar de una matriz alterna.
         if (esNula(matriz)) matriz = getMatrizRGB();
-        
-        // Validación de datos
-        if (!esMatrizCuadrada(matriz)){
-            JOptionPane.showMessageDialog(null, ERRORMATRIZNULA_STRING, "Matriz Imagen: extender matriz", 0);
-            return null;
-        }
+
         int ext = getExtension();
         int[][] matrizExtendida = new int[getAlto()+ext][getAncho()+ext];
         // Recorrer la imagen por sus valores ARGB.
