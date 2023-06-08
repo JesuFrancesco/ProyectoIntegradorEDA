@@ -7,7 +7,7 @@ import paq.interfaces.*;
 /*
  * @author Jesu
  */
-public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
+public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvolucion{
     private int[][] matrizEscalaDeGrises;
     
     public FiltroSobel5x5(BufferedImage imagen){    
@@ -84,9 +84,9 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
         }
         BufferedImage imagen = getImagen();
         // Cargar matrices resultantes
-        cargarMatrizConvolucion(MATRIZGX);
+        cargarMatrizConvolucion(SOBEL5x5_GX);
         int[][] Mx = generarConvolucion();
-        cargarMatrizConvolucion(MATRIZGY);
+        cargarMatrizConvolucion(SOBEL5x5_GY);
         int[][] My = generarConvolucion();
         
         int alto = Mx.length, ancho = Mx[0].length, pixel;
