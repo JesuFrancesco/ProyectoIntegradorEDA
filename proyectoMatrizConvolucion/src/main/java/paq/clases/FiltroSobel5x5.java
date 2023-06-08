@@ -1,9 +1,6 @@
 package paq.clases;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import paq.interfaces.*;
 
@@ -13,7 +10,6 @@ import paq.interfaces.*;
 public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
     private int[][] matrizEscalaDeGrises;
     
-    
     public FiltroSobel5x5(BufferedImage imagen){    
         super(imagen);
         this.matrizEscalaDeGrises = obtenerEscalaGris();
@@ -21,6 +17,7 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
     
     public FiltroSobel5x5(String rutaString) {
         super(rutaString);
+        this.matrizEscalaDeGrises = obtenerEscalaGris();
     }
     
     // Métodos
@@ -30,10 +27,10 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
             for (int y = 0; y < getAlto(); y++) {
                 for (int x = 0; x < getAncho(); x++) {
                     int pixelRGB = getMatrizRGB()[y][x];
-                    int a = (pixelRGB>>24)&0xff;
-                    int r = (pixelRGB>>16)&0xff;   //Canal Red
-                    int g = (pixelRGB>>8)&0xff;    //Canal Green
-                    int b = pixelRGB&0xff;         //Canal Blue
+                    int a = (pixelRGB>>24)&0xff;    // Canal alfa
+                    int r = (pixelRGB>>16)&0xff;    // Canal Red
+                    int g = (pixelRGB>>8)&0xff;     // Canal Green
+                    int b = pixelRGB&0xff;          // Canal Blue
                     int promedio = (r+g+b)/3;
                     matrizEscalaGrises[y][x] = (a<<24) | (promedio<<16) | (promedio<<8) | promedio;
                 }
@@ -55,7 +52,7 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
         }
         
         // Inicio de algoritmo
-        int[][] matrizRGBext = extenderMatrizConCeros(obtenerEscalaGris());
+        int[][] matrizRGBext = extenderMatrizConCeros(getMatrizEscalaDeGrises());
         int[][] matrizResultado = new int[getAlto()][getAncho()];
         
         int n = getMatrizConvolucion().length;
@@ -82,7 +79,9 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
     // Métodos
     public BufferedImage deteccionBordes(int gradiente) {
         // Inicio
-        if (getImagen()==null) {return null;}
+        if (getImagen()==null) {
+            return null;
+        }
         BufferedImage imagen = getImagen();
         // Cargar matrices resultantes
         cargarMatrizConvolucion(MATRIZGX);
@@ -95,70 +94,13 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelSobel5x5{
             for (int x = 0; x < ancho; x++) {
                 pixel = (int) Math.sqrt(Mx[y][x] * Mx[y][x] + My[y][x] * My[y][x]);
                 if (pixel > gradiente)
-                    pixel = (255<<16) | (255<<8) | 255;
+                    pixel = 0xff000000 | (255<<16) | (255<<8) | 255;
                 else 
-                    pixel = (0<<16) | (0<<8) | 0;
+                    pixel = 0xff000000 | (0<<16) | (0<<8) | 0;                    
                 imagen.setRGB(x, y, pixel);
             }
         }
         return imagen;
-    }
-    
-    public void filtroX(String rutaImagen, int gradiente){
-        // Inicio
-        BufferedImage imagen = ConvolucionImagen.cargarImagen(rutaImagen);
-        if (imagen==null) {return;}
-        
-        // Cargar matrices resultantes
-        cargarMatrizConvolucion(MATRIZGX);
-        int[][] Mx = generarConvolucion();
-        
-        // Algoritmo
-        int alto = Mx.length, ancho = Mx[0].length, pixel;
-        for (int y = 0; y < alto; y++) {
-            for (int x = 0; x < ancho; x++) {
-                pixel = Mx[y][x];
-                if (pixel > gradiente)
-                    pixel = (255<<24) | (255<<16) | (255<<8) | 255;
-                else 
-                    pixel = (255<<24) | (0<<16) | (0<<8) | 0;
-                imagen.setRGB(x, y, pixel);
-            }
-        }
-        try {
-            File fin = new File("C:\\Users\\Jesu\\Downloads\\outputX.png");
-            ImageIO.write(imagen, "png", fin);
-        } catch(IOException e){
-            System.out.println(e);
-        }
-    }
-    public void filtroY(String rutaImagen, int gradiente){
-        // Inicio
-        BufferedImage imagen = ConvolucionImagen.cargarImagen(rutaImagen);
-        if (imagen==null) {return;}
-        
-        // Cargar matrices resultantes
-        cargarMatrizConvolucion(MATRIZGY);
-        int[][] My = generarConvolucion();
-        
-        // Algoritmo
-        int alto = My.length, ancho = My[0].length, pixel;
-        for (int y = 0; y < alto; y++) {
-            for (int x = 0; x < ancho; x++) {
-                pixel = My[y][x];
-                if (pixel > gradiente)
-                    pixel = (255<<24) | (255<<16) | (255<<8) | 255;
-                else 
-                    pixel = (255<<24) | (0<<16) | (0<<8) | 0;
-                imagen.setRGB(x, y, pixel);
-            }
-        }
-        try {
-            File fin = new File("C:\\Users\\Jesu\\Downloads\\outputY.png");
-            ImageIO.write(imagen, "png", fin);
-        } catch(IOException e){
-            System.out.println(e);
-        }
     }
 
     public int[][] getMatrizEscalaDeGrises() {
