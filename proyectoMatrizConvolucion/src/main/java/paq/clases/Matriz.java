@@ -1,5 +1,7 @@
 package paq.clases;
 
+import java.util.Arrays;
+
 /*
  * @author Jesu
  */
@@ -30,5 +32,11 @@ public abstract class Matriz {
     }
     public static boolean esNula(double[][] matriz){
         return matriz == null;
+    }
+    
+    public static void verMatriz(int[][] M){
+        for (int[] is : M) {
+            System.out.println(Arrays.toString(is));
+        }
     }
 }
