@@ -1,6 +1,10 @@
-paq\pruebas\Prueba.class
-paq\clases\ConvolucionImagen.class
 paq\clases\Matriz.class
-paq\interfaces\KernelSobel5x5.class
-paq\clases\FiltroSobel5x5.class
+paq\ventanas\Ventana$2.class
+paq\ventanas\Ventana$3.class
 paq\interfaces\Mensajes.class
+paq\pruebas\Main.class
+paq\ventanas\Ventana$1.class
+paq\ventanas\Ventana.class
+paq\clases\ConvolucionImagen.class
+paq\interfaces\KernelConvolucion.class
+paq\clases\FiltroSobel5x5.class

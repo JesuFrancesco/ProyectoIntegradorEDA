@@ -1,26 +1,29 @@
+
 package paq.clases;
 
 import java.awt.image.BufferedImage;
 import javax.swing.JOptionPane;
-import paq.interfaces.*;
+import static paq.clases.Matriz.esNula;
+import paq.interfaces.KernelConvolucion;
+import static paq.interfaces.Mensajes.ERRORMATRIZNULA_STRING;
 
 /*
  * @author Jesu
  */
-public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvolucion{
+public class FiltroGauss3x3 extends ConvolucionImagen implements KernelConvolucion {
+    private int[][] matrizTemporal;
     private int[][] matrizEscalaDeGrises;
     
-    public FiltroSobel5x5(BufferedImage imagen){    
+    public FiltroGauss3x3(BufferedImage imagen){    
         super(imagen);
         this.matrizEscalaDeGrises = obtenerEscalaGris();
     }
     
-    public FiltroSobel5x5(String rutaString) {
+    public FiltroGauss3x3(String rutaString) {
         super(rutaString);
         this.matrizEscalaDeGrises = obtenerEscalaGris();
     }
     
-    // Métodos
     private int[][] obtenerEscalaGris(){
         // Algoritmo de conversión a escala de grises.
         int[][] matrizEscalaGrises = new int[getAlto()][getAncho()];
@@ -38,34 +41,29 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvoluci
         return matrizEscalaGrises;
     }
     
-    public BufferedImage deteccionBordes(int gradiente) {
-        // Inicio
+    public BufferedImage desenfoque(){
+        // Verificación
         if (getImagen() == null) {
             return null;
         }
-        BufferedImage imagen = getImagen();
-        // Cargar matrices resultantes
-        cargarMatrizConvolucion(SOBEL5x5_GX);
-        int[][] Mx = generarConvolucion(getMatrizEscalaDeGrises());
-        cargarMatrizConvolucion(SOBEL5x5_GY);
-        int[][] My = generarConvolucion(getMatrizEscalaDeGrises());
+        BufferedImage imagenFinal = getImagen();
+        cargarMatrizConvolucion(GAUSSIAN3x3);
         
-        int alto = Mx.length, ancho = Mx[0].length, pixel;
+        int[][] M = getMatrizEscalaDeGrises();
+        
+        for (int i = 0; i < 10; i++) {
+            M = generarConvolucion(M);
+        }
+        
+        int alto = M.length, ancho = M[0].length;
         for (int y = 0; y < alto; y++) {
             for (int x = 0; x < ancho; x++) {
-                pixel = (int) Math.sqrt(Mx[y][x] * Mx[y][x] + My[y][x] * My[y][x]);
-                if (pixel > gradiente)
-                    pixel = 0xff000000 | (255<<16) | (255<<8) | 255;
-                else 
-                    pixel = 0xff000000 | (0<<16) | (0<<8) | 0;                    
-                imagen.setRGB(x, y, pixel);
+                imagenFinal.setRGB(x, y, M[y][x]);
             }
         }
-        return imagen;
+        return imagenFinal;
     }
-    
-    // Implementación del método abstracto generarConvolucion()
-    
+
     @Override
     public int[][] generarConvolucion(int[][] matrizEnEscalaDeGrises) {
         // Validación de datos
@@ -87,6 +85,7 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvoluci
                         sumaProd += (matrizExtendida[y-(ext/2)+i][x-(ext/2)+j]&0xFF) * getMatrizConvolucion()[i][j];
                     }
                 }
+                sumaProd = (255<<24) | (sumaProd<<16) | (sumaProd<<8) | sumaProd;
                 matrizResultado[y - (ext/2)][x - (ext/2)] = sumaProd;
             }
         }
@@ -100,5 +99,6 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvoluci
     public void setMatrizEscalaDeGrises(int[][] matrizEscalaDeGrises) {
         this.matrizEscalaDeGrises = matrizEscalaDeGrises;
     }
+    
     
 }

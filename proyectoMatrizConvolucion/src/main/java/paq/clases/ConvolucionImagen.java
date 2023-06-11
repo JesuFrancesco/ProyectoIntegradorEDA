@@ -46,7 +46,7 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
         try {
             File rutaArchivo = new File(rutaString);
             imagen = ImageIO.read(rutaArchivo);
-            JOptionPane.showMessageDialog(null, IMAGENCARGADA_STRING, "Matriz Imagen", 1);
+            JOptionPane.showMessageDialog(null, IMAGENCARGADA_STRING + "\n" + rutaArchivo.getAbsolutePath(), "Matriz Imagen", 1);
         }
         catch (NullPointerException | IOException e) {
             String mensaje = (e instanceof NullPointerException)? ERRORIMAGEN_STRING: ERRORNULLPOINTER_STRING;
@@ -97,14 +97,14 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
             if (esMatrizCuadrada(matrizConvolucion)) {
                 this.matrizConvolucion = matrizConvolucion;
                 this.extension = matrizConvolucion.length-1;
-                JOptionPane.showMessageDialog(null, MATRIZCONV_STRING, "Matriz Imagen", 1);
+                JOptionPane.showMessageDialog(null, MATRIZCONV_STRING + "\n" + Matriz.verMatriz(matrizConvolucion), "Matriz Imagen", 1);
             } else JOptionPane.showMessageDialog(null, ERRORCUADRADO_STRING, "Matriz Imagen: Error", 0);
         } else JOptionPane.showMessageDialog(null, ERRORMATRIZNULA_STRING, "Matriz Imagen: Error", 0);
         
     }
     
     // Método para el filtrado de la imagen: dependiendo del filtro (método abstracto).
-    public abstract int[][] generarConvolucion();
+    public abstract int[][] generarConvolucion(int[][] matrizEnEscalaDeGrises);
     
     // Getters & Setters
     public BufferedImage getImagen() {
