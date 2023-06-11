@@ -34,9 +34,19 @@ public abstract class Matriz {
         return matriz == null;
     }
     
-    public static void verMatriz(int[][] M){
-        for (int[] is : M) {
-            System.out.println(Arrays.toString(is));
+    public static String verMatriz(int[][] Matriz){
+        String m = "";
+        for (int[] filas : Matriz) {
+            m += Arrays.toString(filas) + "\n";
         }
+        return m;
+    }
+    
+    public static String verMatriz(double[][] Matriz){
+        String m = "";
+        for (double[] filas : Matriz) {
+            m += Arrays.toString(filas) + "\n";
+        }
+        return m;
     }
 }

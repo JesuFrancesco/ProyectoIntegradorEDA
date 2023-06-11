@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import paq.clases.FiltroGauss3x3;
+import paq.clases.FiltroGauss5x5;
 import paq.clases.FiltroSobel5x5;
 
 /**
@@ -237,15 +239,13 @@ public class Ventana extends javax.swing.JFrame {
                     new FiltroSobel5x5(ruta).deteccionBordes(gradiente)
             );
         } else if (rBotonGauss3x3.isSelected()) {
-            // Código para filtro gauss 3x3
-            
-            
-            
+            setImagenFiltrada(
+                    new FiltroGauss3x3(ruta).desenfoque()
+            );
         } else if (rBotonGauss5x5.isSelected()) {
-            // Código para filtro gauss 5x5
-            
-            
-            
+            setImagenFiltrada(
+                    new FiltroGauss5x5(ruta).desenfoque()
+            );
         } else if (rBotonBoxBlur.isSelected()) {
             // Código para filtro box blur
             
