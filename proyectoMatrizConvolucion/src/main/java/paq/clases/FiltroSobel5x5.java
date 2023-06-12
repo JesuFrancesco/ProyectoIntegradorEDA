@@ -65,9 +65,8 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvoluci
     }
     
     // Implementación del método abstracto generarConvolucion()
-    
     @Override
-    public int[][] generarConvolucion(int[][] matrizEnEscalaDeGrises) {
+    public int[][] generarConvolucion(int[][] matriz) {
         // Validación de datos
         if (esNula(getMatrizConvolucion()) || esNula(getMatrizRGB())){
             JOptionPane.showMessageDialog(null, ERRORMATRIZNULA_STRING, "Matriz Imagen: Error", 0);
@@ -75,7 +74,7 @@ public class FiltroSobel5x5 extends ConvolucionImagen implements KernelConvoluci
         }
         
         // Inicio de algoritmo
-        int[][] matrizExtendida = extenderMatrizConCeros(matrizEnEscalaDeGrises);
+        int[][] matrizExtendida = extenderMatrizConCeros(matriz);
         int[][] matrizResultado = new int[getAlto()][getAncho()];
         int n = getMatrizConvolucion().length, ext = getExtension();
         for (int y = ext/2; y < getAlto() + (ext/2); y++) {

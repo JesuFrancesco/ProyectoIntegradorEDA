@@ -195,6 +195,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Sobel 3x3"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rBotonSobel3x3ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rBotonSobel5x5">
       <Properties>
@@ -203,6 +206,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Sobel 5x5"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rBotonSobel5x5ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rBotonGauss3x3">
       <Properties>
@@ -211,6 +217,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Gauss 3x3"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rBotonGauss3x3ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rBotonGauss5x5">
       <Properties>
@@ -219,6 +228,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Gauss 5x5"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rBotonGauss5x5ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rBotonBoxBlur">
       <Properties>
@@ -227,6 +239,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Box blur"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rBotonBoxBlurActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="botonFiltrar">
       <Properties>

@@ -8,8 +8,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import paq.clases.ConvolucionImagen;
+import paq.clases.FiltroBoxBlur;
 import paq.clases.FiltroGauss3x3;
 import paq.clases.FiltroGauss5x5;
+import paq.clases.FiltroSobel3x3;
 import paq.clases.FiltroSobel5x5;
 
 /**
@@ -19,13 +22,16 @@ import paq.clases.FiltroSobel5x5;
 public class Ventana extends javax.swing.JFrame {
     private final JFileChooser seleccionarImagen = new JFileChooser();
     private final JFileChooser guardarImagen = new JFileChooser();
+    private BufferedImage imagenCargada = null;
     private BufferedImage imagenFiltrada = null;
     
     // Constructor de la ventana
     public Ventana() {
         initComponents();
-        campoImagenCargada.setVisible(false); campoImagenPrevio.setVisible(false);
-        campoImagenFiltrada.setVisible(false); campoImagenDespues.setVisible(false);
+        // No mostrar determinados botones previo a información del usuario
+        campoSubGradiente.setVisible(false);    campoGradiente.setVisible(false); 
+        campoImagenCargada.setVisible(false);   campoImagenPrevio.setVisible(false); 
+        campoImagenFiltrada.setVisible(false);  campoImagenDespues.setVisible(false);
         botonGuardar.setVisible(false);
     }
 
@@ -85,18 +91,43 @@ public class Ventana extends javax.swing.JFrame {
 
         grupoFiltros.add(rBotonSobel3x3);
         rBotonSobel3x3.setText("Sobel 3x3");
+        rBotonSobel3x3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBotonSobel3x3ActionPerformed(evt);
+            }
+        });
 
         grupoFiltros.add(rBotonSobel5x5);
         rBotonSobel5x5.setText("Sobel 5x5");
+        rBotonSobel5x5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBotonSobel5x5ActionPerformed(evt);
+            }
+        });
 
         grupoFiltros.add(rBotonGauss3x3);
         rBotonGauss3x3.setText("Gauss 3x3");
+        rBotonGauss3x3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBotonGauss3x3ActionPerformed(evt);
+            }
+        });
 
         grupoFiltros.add(rBotonGauss5x5);
         rBotonGauss5x5.setText("Gauss 5x5");
+        rBotonGauss5x5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBotonGauss5x5ActionPerformed(evt);
+            }
+        });
 
         grupoFiltros.add(rBotonBoxBlur);
         rBotonBoxBlur.setText("Box blur");
+        rBotonBoxBlur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBotonBoxBlurActionPerformed(evt);
+            }
+        });
 
         botonFiltrar.setText("Filtrar imagen");
         botonFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -203,58 +234,90 @@ public class Ventana extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private int leerCampoGradiente(){
+        int gradiente;
+        try {
+            gradiente = Integer.parseInt(campoGradiente.getText());
+            if (gradiente < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "No se ha ingresado una gradiente válida", "Gradiente", 0);
+            return -1;
+        }
+        return gradiente;
+    }
+    
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+        // En caso se haya filtrado una imagen previamente
+        setImagenCargada(null);
+        campoImagenCargada.setVisible(false); campoImagenPrevio.setVisible(false);
+        campoImagenFiltrada.setVisible(false); campoImagenFiltrada.setVisible(false);
+        
+        // Abrir ventana de selección de archivo.
         int estado = seleccionarImagen.showOpenDialog(campoTitulo);
         if(estado == 0){
-            File archivo = seleccionarImagen.getSelectedFile();
+            // Colocar la ruta en el text field.
             campoRutaImagen.setText(seleccionarImagen.getSelectedFile().getAbsolutePath());
-            ImageIcon imagenCargada = new ImageIcon (
-                    new ImageIcon(archivo.toString()).
-                            getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH)
-            );
+            // Obtener ruta y verificar si es .png o .jpg
+            String ruta = seleccionarImagen.getSelectedFile().getAbsolutePath();
+            if(!ruta.endsWith(".png") && !ruta.endsWith(".jpg")){
+                JOptionPane.showMessageDialog(null, "No se ha seleccionado una imagen válida");
+                return;
+            }
+            
+            // Ubicar imagen en el campo de imagen cargada
+            setImagenCargada(ConvolucionImagen.cargarImagen(ruta));
+            ImageIcon icono = 
+                    new ImageIcon(getImagenCargada().getScaledInstance(350, 350, Image.SCALE_SMOOTH))
+            ;
             campoImagenCargada.setVisible(true);
-            campoImagenPrevio.setIcon(imagenCargada); campoImagenPrevio.setVisible(true);
+            campoImagenPrevio.setIcon(icono); campoImagenPrevio.setVisible(true);
         }
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFiltrarActionPerformed
+        setImagenFiltrada(null); campoImagenFiltrada.setIcon(null);
         // Variables
-        String ruta = campoRutaImagen.getText();
-        int gradiente;
-        try {
-            gradiente = Integer.parseInt(campoGradiente.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "No se ha ingresado una gradiente válida", "Gradiente", 0);
-            return;
+        BufferedImage img = getImagenCargada(); 
+        
+        if(img == null) {
+            String ruta = campoRutaImagen.getText();
+            img = ConvolucionImagen.cargarImagen(ruta); if(img==null) return;
+            ImageIcon icono = 
+                    new ImageIcon(img.getScaledInstance(350, 350, Image.SCALE_SMOOTH)
+            );
+            campoImagenCargada.setVisible(true);
+            campoImagenPrevio.setIcon(icono); campoImagenPrevio.setVisible(true);
         }
         
         // Conjunto de filtros
         if (rBotonSobel3x3.isSelected()) {
-            // Código para filtro sobel 3x3
-            
-            
-            
-        } else if (rBotonSobel5x5.isSelected()) {
+            int g = leerCampoGradiente();
+            if (g == -1) {return;}
             setImagenFiltrada(
-                    new FiltroSobel5x5(ruta).deteccionBordes(gradiente)
+                    new FiltroSobel3x3(img).deteccionBordes(g)
+            );
+        } else if (rBotonSobel5x5.isSelected()) {
+            int g = leerCampoGradiente();
+            if (g == -1) {return;}
+            setImagenFiltrada(
+                    new FiltroSobel5x5(img).deteccionBordes(g)
             );
         } else if (rBotonGauss3x3.isSelected()) {
             setImagenFiltrada(
-                    new FiltroGauss3x3(ruta).desenfoque()
+                    new FiltroGauss3x3(img).desenfoque()
             );
         } else if (rBotonGauss5x5.isSelected()) {
             setImagenFiltrada(
-                    new FiltroGauss5x5(ruta).desenfoque()
+                    new FiltroGauss5x5(img).desenfoque()
             );
         } else if (rBotonBoxBlur.isSelected()) {
-            // Código para filtro box blur
-            
-            
-            
+            setImagenFiltrada(
+                    new FiltroBoxBlur(img).desenfoque()
+            );
         } else {
             JOptionPane.showMessageDialog(null, "¡No se ha elegido un filtro!");
         }
-        // Opción a guardar
+        // Mostrar la imagen filtrada
         if (getImagenFiltrada() != null) {
             campoImagenFiltrada.setVisible(true);
             Image imagenDespues = getImagenFiltrada().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
@@ -268,7 +331,7 @@ public class Ventana extends javax.swing.JFrame {
         if(estado == 0){
             String salida = guardarImagen.getSelectedFile().getAbsolutePath();
             if(!salida.endsWith(".png") && !salida.endsWith(".PNG")) salida += ".png";
-            try{
+            try {
                 File archivo = new File(salida);
                 ImageIO.write(imagenFiltrada, "png", archivo);
             } catch(IOException e){
@@ -276,6 +339,39 @@ public class Ventana extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_botonGuardarActionPerformed
+
+    private void rBotonSobel3x3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonSobel3x3ActionPerformed
+        campoSubGradiente.setVisible(true);
+        campoGradiente.setVisible(true);
+    }//GEN-LAST:event_rBotonSobel3x3ActionPerformed
+
+    private void rBotonSobel5x5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonSobel5x5ActionPerformed
+        campoSubGradiente.setVisible(true);
+        campoGradiente.setVisible(true);
+    }//GEN-LAST:event_rBotonSobel5x5ActionPerformed
+
+    private void rBotonGauss3x3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonGauss3x3ActionPerformed
+        campoSubGradiente.setVisible(false);
+        campoGradiente.setVisible(false);
+    }//GEN-LAST:event_rBotonGauss3x3ActionPerformed
+
+    private void rBotonGauss5x5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonGauss5x5ActionPerformed
+        campoSubGradiente.setVisible(false);
+        campoGradiente.setVisible(false);
+    }//GEN-LAST:event_rBotonGauss5x5ActionPerformed
+
+    private void rBotonBoxBlurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonBoxBlurActionPerformed
+        campoSubGradiente.setVisible(false);
+        campoGradiente.setVisible(false);
+    }//GEN-LAST:event_rBotonBoxBlurActionPerformed
+
+    public BufferedImage getImagenCargada() {
+        return imagenCargada;
+    }
+
+    public void setImagenCargada(BufferedImage imagenCargada) {
+        this.imagenCargada = imagenCargada;
+    }
 
     public BufferedImage getImagenFiltrada() {
         return imagenFiltrada;

@@ -44,6 +44,7 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
     public static BufferedImage cargarImagen(String rutaString){
         BufferedImage imagen;
         try {
+            if(!rutaString.endsWith(".png") && !rutaString.endsWith(".jpg")) throw new NullPointerException();
             File rutaArchivo = new File(rutaString);
             imagen = ImageIO.read(rutaArchivo);
             JOptionPane.showMessageDialog(null, IMAGENCARGADA_STRING + "\n" + rutaArchivo.getAbsolutePath(), "Matriz Imagen", 1);
@@ -104,7 +105,7 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
     }
     
     // Método para el filtrado de la imagen: dependiendo del filtro (método abstracto).
-    public abstract int[][] generarConvolucion(int[][] matrizEnEscalaDeGrises);
+    public abstract int[][] generarConvolucion(int[][] matriz);
     
     // Getters & Setters
     public BufferedImage getImagen() {
