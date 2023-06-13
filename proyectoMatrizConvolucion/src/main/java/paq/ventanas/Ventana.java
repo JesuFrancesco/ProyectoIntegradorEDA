@@ -22,14 +22,13 @@ import paq.clases.FiltroSobel5x5;
 public class Ventana extends javax.swing.JFrame {
     private final JFileChooser seleccionarImagen = new JFileChooser();
     private final JFileChooser guardarImagen = new JFileChooser();
-    private BufferedImage imagenCargada = null;
     private BufferedImage imagenFiltrada = null;
     
     // Constructor de la ventana
     public Ventana() {
         initComponents();
         // No mostrar determinados botones previo a información del usuario
-        campoSubGradiente.setVisible(false);    campoGradiente.setVisible(false); 
+        campoSubGradienteRadio.setVisible(false);    campoGradienteRadio.setVisible(false); 
         campoImagenCargada.setVisible(false);   campoImagenPrevio.setVisible(false); 
         campoImagenFiltrada.setVisible(false);  campoImagenDespues.setVisible(false);
         botonGuardar.setVisible(false);
@@ -54,16 +53,18 @@ public class Ventana extends javax.swing.JFrame {
         rBotonGauss5x5 = new javax.swing.JRadioButton();
         rBotonBoxBlur = new javax.swing.JRadioButton();
         botonFiltrar = new javax.swing.JButton();
-        campoSubGradiente = new javax.swing.JLabel();
-        campoGradiente = new javax.swing.JTextField();
+        campoSubGradienteRadio = new javax.swing.JLabel();
+        campoGradienteRadio = new javax.swing.JTextField();
         botonGuardar = new javax.swing.JButton();
         campoImagenPrevio = new javax.swing.JLabel();
         campoImagenDespues = new javax.swing.JLabel();
+        campoSubIteraciones = new javax.swing.JLabel();
+        campoIteraciones = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Filtro de imágenes");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(800, 800));
+        setMinimumSize(new java.awt.Dimension(850, 800));
         setPreferredSize(new java.awt.Dimension(800, 800));
 
         campoTitulo.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 36)); // NOI18N
@@ -136,7 +137,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        campoSubGradiente.setText("Gradiente");
+        campoSubGradienteRadio.setText("Gradiente");
 
         botonGuardar.setText("Guardar imagen");
         botonGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -144,6 +145,8 @@ public class Ventana extends javax.swing.JFrame {
                 botonGuardarActionPerformed(evt);
             }
         });
+
+        campoSubIteraciones.setText("Iteraciones");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,30 +156,33 @@ public class Ventana extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(campoTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonFiltrar)
+                    .addComponent(campoSubRutaImagen)
+                    .addComponent(campoRutaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botonFiltrar)
-                            .addComponent(campoSubRutaImagen)
-                            .addComponent(campoRutaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rBotonSobel3x3)
+                                .addGap(18, 18, 18)
+                                .addComponent(rBotonSobel5x5)
+                                .addGap(18, 18, 18)
+                                .addComponent(rBotonGauss3x3)
+                                .addGap(18, 18, 18)
+                                .addComponent(rBotonGauss5x5)
+                                .addGap(18, 18, 18)
+                                .addComponent(rBotonBoxBlur))
+                            .addComponent(campoSubFiltroImagen))
+                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botonBuscar)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(rBotonSobel3x3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(rBotonSobel5x5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(rBotonGauss3x3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(rBotonGauss5x5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(rBotonBoxBlur))
-                                    .addComponent(campoSubFiltroImagen))
-                                .addGap(48, 48, 48)
+                                    .addComponent(campoGradienteRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(campoSubGradienteRadio))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(campoGradiente, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(botonBuscar)
-                                    .addComponent(campoSubGradiente))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(campoSubIteraciones)
+                                    .addComponent(campoIteraciones, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(campoImagenCargada, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
@@ -205,7 +211,8 @@ public class Ventana extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campoSubFiltroImagen)
-                    .addComponent(campoSubGradiente))
+                    .addComponent(campoSubGradienteRadio)
+                    .addComponent(campoSubIteraciones))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rBotonSobel3x3)
@@ -213,7 +220,8 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(rBotonGauss3x3)
                     .addComponent(rBotonGauss5x5)
                     .addComponent(rBotonBoxBlur)
-                    .addComponent(campoGradiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoGradienteRadio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoIteraciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(botonFiltrar)
                 .addGap(18, 18, 18)
@@ -234,10 +242,10 @@ public class Ventana extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private int leerCampoGradiente(){
+    private int leerCampoGradienteRadio(){
         int gradiente;
         try {
-            gradiente = Integer.parseInt(campoGradiente.getText());
+            gradiente = Integer.parseInt(campoGradienteRadio.getText());
             if (gradiente < 0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "No se ha ingresado una gradiente válida", "Gradiente", 0);
@@ -246,11 +254,21 @@ public class Ventana extends javax.swing.JFrame {
         return gradiente;
     }
     
+    private int leerCampoIteraciones(){
+        int iteraciones;
+        try {
+            iteraciones = Integer.parseInt(campoIteraciones.getText());
+            if (iteraciones < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "No se ha ingresado una gradiente válida", "Gradiente", 0);
+            return -1;
+        }
+        return iteraciones;
+    }
+    
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        // En caso se haya filtrado una imagen previamente
-        setImagenCargada(null);
         campoImagenCargada.setVisible(false); campoImagenPrevio.setVisible(false);
-        campoImagenFiltrada.setVisible(false); campoImagenFiltrada.setVisible(false);
+        campoImagenFiltrada.setVisible(false); campoImagenDespues.setVisible(false);
         
         // Abrir ventana de selección de archivo.
         int estado = seleccionarImagen.showOpenDialog(campoTitulo);
@@ -265,54 +283,62 @@ public class Ventana extends javax.swing.JFrame {
             }
             
             // Ubicar imagen en el campo de imagen cargada
-            setImagenCargada(ConvolucionImagen.cargarImagen(ruta));
+            BufferedImage img = ConvolucionImagen.cargarImagen(ruta);
             ImageIcon icono = 
-                    new ImageIcon(getImagenCargada().getScaledInstance(350, 350, Image.SCALE_SMOOTH))
+                    new ImageIcon(img.getScaledInstance(350, 350, Image.SCALE_SMOOTH))
             ;
             campoImagenCargada.setVisible(true);
             campoImagenPrevio.setIcon(icono); campoImagenPrevio.setVisible(true);
+            campoImagenDespues.setIcon(null);
+        } else if (estado == 1 && campoImagenPrevio.getIcon()!=null) {
+            campoImagenCargada.setVisible(true); campoImagenPrevio.setVisible(true);
+            if(campoImagenDespues.getIcon()!=null){
+                campoImagenFiltrada.setVisible(true); campoImagenDespues.setVisible(true);
+            }
         }
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFiltrarActionPerformed
+        // Eliminar filtro previo
         setImagenFiltrada(null); campoImagenFiltrada.setIcon(null);
+        
         // Variables
-        BufferedImage img = getImagenCargada(); 
+        String ruta = campoRutaImagen.getText();
+        BufferedImage img = ConvolucionImagen.cargarImagen(ruta);
         
-        if(img == null) {
-            String ruta = campoRutaImagen.getText();
-            img = ConvolucionImagen.cargarImagen(ruta); if(img==null) return;
-            ImageIcon icono = 
-                    new ImageIcon(img.getScaledInstance(350, 350, Image.SCALE_SMOOTH)
-            );
-            campoImagenCargada.setVisible(true);
-            campoImagenPrevio.setIcon(icono); campoImagenPrevio.setVisible(true);
-        }
-        
+        if(img==null) return;
         // Conjunto de filtros
         if (rBotonSobel3x3.isSelected()) {
-            int g = leerCampoGradiente();
+            int g = leerCampoGradienteRadio();
             if (g == -1) {return;}
             setImagenFiltrada(
                     new FiltroSobel3x3(img).deteccionBordes(g)
             );
         } else if (rBotonSobel5x5.isSelected()) {
-            int g = leerCampoGradiente();
+            int g = leerCampoGradienteRadio();
             if (g == -1) {return;}
             setImagenFiltrada(
                     new FiltroSobel5x5(img).deteccionBordes(g)
             );
         } else if (rBotonGauss3x3.isSelected()) {
+            int i = leerCampoIteraciones();
+            if (i == -1) {return;}
             setImagenFiltrada(
-                    new FiltroGauss3x3(img).desenfoque()
+                    new FiltroGauss3x3(img).desenfoque(i)
             );
         } else if (rBotonGauss5x5.isSelected()) {
+            int i = leerCampoIteraciones();
+            if (i == -1) {return;}
             setImagenFiltrada(
-                    new FiltroGauss5x5(img).desenfoque()
+                    new FiltroGauss5x5(img).desenfoque(i)
             );
         } else if (rBotonBoxBlur.isSelected()) {
+            int i = leerCampoIteraciones();
+            if (i == -1) {return;}
+            int r = leerCampoGradienteRadio();
+            if (r == -1) {return;}
             setImagenFiltrada(
-                    new FiltroBoxBlur(img).desenfoque()
+                    new FiltroBoxBlur(img).desenfoque(r,i)
             );
         } else {
             JOptionPane.showMessageDialog(null, "¡No se ha elegido un filtro!");
@@ -341,37 +367,43 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_botonGuardarActionPerformed
 
     private void rBotonSobel3x3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonSobel3x3ActionPerformed
-        campoSubGradiente.setVisible(true);
-        campoGradiente.setVisible(true);
+        campoSubGradienteRadio.setText("Gradiente");
+        campoSubGradienteRadio.setVisible(true);
+        campoGradienteRadio.setVisible(true);
+        campoSubIteraciones.setVisible(false);
+        campoIteraciones.setVisible(false);
     }//GEN-LAST:event_rBotonSobel3x3ActionPerformed
 
     private void rBotonSobel5x5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonSobel5x5ActionPerformed
-        campoSubGradiente.setVisible(true);
-        campoGradiente.setVisible(true);
+        campoSubGradienteRadio.setText("Gradiente");
+        campoSubGradienteRadio.setVisible(true);
+        campoGradienteRadio.setVisible(true);
+        campoSubIteraciones.setVisible(false);
+        campoIteraciones.setVisible(false);
     }//GEN-LAST:event_rBotonSobel5x5ActionPerformed
 
     private void rBotonGauss3x3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonGauss3x3ActionPerformed
-        campoSubGradiente.setVisible(false);
-        campoGradiente.setVisible(false);
+        campoSubGradienteRadio.setVisible(false);
+        campoGradienteRadio.setVisible(false);
+        campoSubIteraciones.setVisible(true);
+        campoIteraciones.setVisible(true);
     }//GEN-LAST:event_rBotonGauss3x3ActionPerformed
 
     private void rBotonGauss5x5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonGauss5x5ActionPerformed
-        campoSubGradiente.setVisible(false);
-        campoGradiente.setVisible(false);
+        campoSubGradienteRadio.setVisible(false);
+        campoGradienteRadio.setVisible(false);
+        campoSubIteraciones.setVisible(true);
+        campoIteraciones.setVisible(true);
     }//GEN-LAST:event_rBotonGauss5x5ActionPerformed
 
     private void rBotonBoxBlurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBotonBoxBlurActionPerformed
-        campoSubGradiente.setVisible(false);
-        campoGradiente.setVisible(false);
+        campoSubGradienteRadio.setText("Radio");
+        campoGradienteRadio.setText("");
+        campoSubGradienteRadio.setVisible(true);
+        campoGradienteRadio.setVisible(true);
+        campoSubIteraciones.setVisible(true);
+        campoIteraciones.setVisible(true);
     }//GEN-LAST:event_rBotonBoxBlurActionPerformed
-
-    public BufferedImage getImagenCargada() {
-        return imagenCargada;
-    }
-
-    public void setImagenCargada(BufferedImage imagenCargada) {
-        this.imagenCargada = imagenCargada;
-    }
 
     public BufferedImage getImagenFiltrada() {
         return imagenFiltrada;
@@ -385,14 +417,16 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton botonBuscar;
     private javax.swing.JButton botonFiltrar;
     private javax.swing.JButton botonGuardar;
-    private javax.swing.JTextField campoGradiente;
+    private javax.swing.JTextField campoGradienteRadio;
     private javax.swing.JLabel campoImagenCargada;
     private javax.swing.JLabel campoImagenDespues;
     private javax.swing.JLabel campoImagenFiltrada;
     private javax.swing.JLabel campoImagenPrevio;
+    private javax.swing.JTextField campoIteraciones;
     private javax.swing.JTextField campoRutaImagen;
     private javax.swing.JLabel campoSubFiltroImagen;
-    private javax.swing.JLabel campoSubGradiente;
+    private javax.swing.JLabel campoSubGradienteRadio;
+    private javax.swing.JLabel campoSubIteraciones;
     private javax.swing.JLabel campoSubRutaImagen;
     private javax.swing.JLabel campoTitulo;
     private javax.swing.ButtonGroup grupoFiltros;

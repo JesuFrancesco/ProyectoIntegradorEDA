@@ -69,7 +69,7 @@ public abstract class ConvolucionImagen extends Matriz implements Mensajes{
         } else JOptionPane.showMessageDialog(null, ERRORIMAGEN_STRING, "Matriz Imagen", 0);
     }
     
-    protected int[][] extenderMatrizConCeros(int[][] matriz){
+    protected int[][] extenderMatrizConCeros(int[][] matriz){ // Zero padding
         int matrizAlto, matrizAncho;
         // En caso se desee usar el atributo matrizRGB en lugar de una matriz alterna.
         if (!esNula(matriz)){

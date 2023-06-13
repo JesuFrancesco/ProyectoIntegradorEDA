@@ -1,11 +1,8 @@
-
 package paq.clases;
 
 import java.awt.image.BufferedImage;
 import javax.swing.JOptionPane;
-import static paq.clases.Matriz.esNula;
 import paq.interfaces.KernelConvolucion;
-import static paq.interfaces.Mensajes.ERRORMATRIZNULA_STRING;
 
 /*
  * @author Jesu
@@ -20,7 +17,7 @@ public class FiltroGauss3x3 extends ConvolucionImagen implements KernelConvoluci
         super(rutaString);
     }
     
-    public BufferedImage desenfoque(){
+    public BufferedImage desenfoque(int iteraciones){
         // Verificación
         if (getImagen() == null) {
             return null;
@@ -30,8 +27,10 @@ public class FiltroGauss3x3 extends ConvolucionImagen implements KernelConvoluci
         
         // Obtener la convolución de la imagen por la matriz
         int[][] M = getMatrizRGB();
-        M = generarConvolucion(M);
         
+        for (int i = 0; i < iteraciones; i++) {
+            M = generarConvolucion(M);
+        }
         // Colocar los valores a la imagen resultante
         int alto = M.length, ancho = M[0].length;
         for (int y = 0; y < alto; y++) {
@@ -42,6 +41,36 @@ public class FiltroGauss3x3 extends ConvolucionImagen implements KernelConvoluci
         return imagenFinal;
     }
 
+//    @Override
+//    protected int[][] extenderMatrizConCeros(int[][] matriz) {
+//        int matrizAlto, matrizAncho;
+//        // En caso se desee usar el atributo matrizRGB en lugar de una matriz alterna.
+//        if (!esNula(matriz)){
+//            matrizAlto = matriz.length;
+//            matrizAncho = matriz[0].length;
+//        } else {
+//            matriz = getMatrizRGB();
+//            matrizAlto = getAlto();
+//            matrizAncho = getAncho();
+//        }
+//
+//        int ext = getExtension();
+//        int[][] matrizExtendida = new int[matrizAlto + ext][matrizAncho + ext];
+//        for (int i = 0; i < matrizExtendida.length; i++) {
+//            for (int j = 0; j < matrizExtendida[0].length; j++) {
+//                matrizExtendida[i][j] = (255<<24) | (255<<16) | (255<<8) | (255);
+//            }
+//        }
+//        // Recorrer la imagen por sus valores ARGB.
+//        for(int y = ext/2; y < matrizAlto + (ext/2); y++){
+//            for(int x = ext/2; x < matrizAncho + (ext/2); x++){
+//                int p = matriz[y-ext/2][x-ext/2];
+//                matrizExtendida[y][x] = p;
+//            }
+//        }
+//        return matrizExtendida;
+//    }
+ 
     @Override
     public int[][] generarConvolucion(int[][] matriz) {
         // Validación de datos
